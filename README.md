@@ -1,2 +1,2 @@
 - 开发环境：Ubuntu22.04 (wsl)
-- 
+- 开发框架：Vue + Java
