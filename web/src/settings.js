@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '基于区块链的AI训练数据共享系统',
+  title: 'PriceHub-好价汇',
 
   /**
    * @type {boolean} true | false

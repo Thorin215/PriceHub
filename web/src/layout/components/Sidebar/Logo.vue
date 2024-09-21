@@ -24,8 +24,8 @@ export default {
   },
   data() {
     return {
-      title: '基于区块链的AI训练数据共享系统',
-      logo: 'favicon.png'
+      title: 'PriceHub',
+      logo: 'logo.png'
     }
   }
 }

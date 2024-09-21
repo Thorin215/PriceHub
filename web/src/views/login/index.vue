@@ -1,32 +1,33 @@
 <template>
   <div class="login-container">
-    <!-- 图片元素 -->
-    <div class="header-image">
-      <img src="https://blog-pic-thorin.oss-cn-hangzhou.aliyuncs.com/ZJU-logo.svg" alt="Header Image">
-    </div>
     <el-form ref="loginForm" class="login-form" auto-complete="on" label-position="left">
       <div class="example">
-        <h1 class='subtitle'>GenShIn</h1>
+        <h1 class='title'>PriceHub</h1>
+        <h2 class='title'>好价汇</h2>
+        <h3 class="title">B/S程序设计大作业</h3>
       </div>
-      <div class="title-container">
-        <h3 class="title">基于区块链的AI训练数据共享系统</h3>
+
+      <div class="form-area">
+        <el-form :model="loginForm" class="login-form">
+          <el-form-item label="用户角色">
+            <el-select v-model="loginForm.id" placeholder="请选择用户角色" class="login-select" @change="selectGet"> 
+              <el-option
+                v-for="item in userList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+                <span style="float: left">{{ item.name }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.id }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+  
+          <el-form-item label="密码">
+            <el-input type="password" v-model="loginForm.password" placeholder="请输入密码"></el-input>
+          </el-form-item>
+        </el-form>
       </div>
-      <el-select v-model="loginForm.id" placeholder="请选择用户角色" class="login-select" @change="selectGet">
-        <el-option
-          v-for="item in userList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        >
-          <span style="float: left">{{ item.name }}</span>
-          <span style="float: right; color: #8492a6; font-size: 13px">{{ item.id }}</span>
-        </el-option>
-      </el-select>
-
-      <el-form-item label="密码">
-        <el-input type="password" v-model="loginForm.password" placeholder="请输入密码"></el-input>
-      </el-form-item>
-
       <!-- 按钮容器 -->
       <div class="button-container">
         <el-button :loading="loading" type="primary" class="action-button" @click.native.prevent="handleLogin">登录</el-button>
@@ -145,7 +146,7 @@ export default {
   background-color: #f2f2f2; // 设置为淡灰色
   background-size: 100% 100%;
   overflow: hidden;
-
+  display: flex;
   // 图片容器样式
   .header-image {
     width: 100%;
@@ -183,6 +184,14 @@ export default {
 
   .action-button {
     flex: 1;                  // 使按钮均匀分布，占据相同宽度
+  }
+
+  .form-area {
+    flex: 1; /* 或者使用固定宽度，如 300px */
+  }
+  
+  .user-info {
+    margin-left: 20px; /* 控制间距 */
   }
 }
 </style>
