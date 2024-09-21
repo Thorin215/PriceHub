@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function queryAllUsers() {
   return request({
-    url: 'http://localhost:8888/api/v1/user/all',
+    url: 'http://localhost:8080/api/user/all',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -12,7 +12,7 @@ export function queryAllUsers() {
 
 export function queryUser(data) {
   return request({
-    url: 'http://localhost:8888/api/v1/user',
+    url: 'http://localhost:8080/api/user',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -23,7 +23,7 @@ export function queryUser(data) {
 
 export function createUser(data) {
   return request({
-    url: 'http://localhost:8080/api/users',
+    url: 'http://localhost:8080/api/user/create',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -34,7 +34,7 @@ export function createUser(data) {
 
 export function checkLogin(data) {
   return request({
-    url: 'http://localhost:8888/api/v1/user/login',
+    url: 'http://localhost:8080/api/user/login',
     headers: {
       'Content-Type': 'application/json'
     },

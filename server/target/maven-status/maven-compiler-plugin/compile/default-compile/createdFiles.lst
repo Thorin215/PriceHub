@@ -1,5 +1,8 @@
 com/pricehub/UserController.class
-com/pricehub/UserController$Response.class
 com/pricehub/UserRepository.class
+com/pricehub/UserController$ListResponse.class
+com/pricehub/UserController$Response.class
+com/pricehub/UserController$LoginRequest.class
+com/pricehub/UserController$QueryRequest.class
 com/pricehub/PriceHubApplication.class
 com/pricehub/User.class
