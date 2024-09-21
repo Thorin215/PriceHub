@@ -1,3 +1,4 @@
-/mnt/d/86134/Desktop/PriceHub/server/src/main/java/route/Route.java
-/mnt/d/86134/Desktop/PriceHub/server/src/main/java/Main.java
-/mnt/d/86134/Desktop/PriceHub/server/src/main/java/api/User.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/UserController.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/User.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/PriceHubApplication.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/UserRepository.java
