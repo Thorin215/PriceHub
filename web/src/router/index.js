@@ -27,7 +27,7 @@ export const constantRoutes = [
         name: 'Dataset',
         component: () => import('@/views/dataset/list/index'),
         meta: {
-          title: '数据信息',
+          title: '商品信息',
           icon: 'xj'
         }
       }]
