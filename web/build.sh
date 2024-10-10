@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t fabric-genshin.web .
+docker build -t pricehub.web .
