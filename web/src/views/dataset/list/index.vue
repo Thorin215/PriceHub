@@ -83,18 +83,18 @@ export default {
 
 <style>
 .container {
-  padding: 100px;
+  padding: 40px;
   background-color: #f9f9f9; /* 添加背景色 */
 }
 
 .product-list {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* 商品之间的间距 */
+  gap: 5px; /* 商品之间的间距 */
 }
 
 .product-card {
-  width: 100%;
+  width: 40%;
   border: 1px solid #e0e0e0; /* 添加边框 */
   border-radius: 8px; /* 圆角 */
   padding: 20px; /* 内边距 */
