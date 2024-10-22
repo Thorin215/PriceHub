@@ -22,7 +22,7 @@ public class GoodController {
     }
 
     // 获取所有商品
-    @GetMapping
+    @PostMapping("/all")
     public ResponseEntity<List<Good>> getAllGoods() {
         List<Good> goods = goodService.getAllGoods();
         return new ResponseEntity<>(goods, HttpStatus.OK);
