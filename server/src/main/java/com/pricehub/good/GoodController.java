@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/goods")
+@CrossOrigin(origins = "*")
 public class GoodController {
 
     @Autowired
@@ -23,9 +24,10 @@ public class GoodController {
 
     // 获取所有商品
     @PostMapping("/all")
-    public ResponseEntity<List<Good>> getAllGoods() {
+    public ResponseEntity<ListResponse> getAllGoods() {
         List<Good> goods = goodService.getAllGoods();
-        return new ResponseEntity<>(goods, HttpStatus.OK);
+        ListResponse response = new ListResponse("成功", 200, goods);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 根据ID获取商品
@@ -51,10 +53,47 @@ public class GoodController {
     }
 
     // 创建商品版本
-    @PostMapping("/{goodId}/versions")
-    public ResponseEntity<Version> createVersion(@PathVariable Long goodId, @RequestParam Double price) {
-        Version version = goodService.createVersionForGood(goodId, price);
-        return new ResponseEntity<>(version, HttpStatus.CREATED);
+    // @PostMapping("/{goodId}/versions")
+    // public ResponseEntity<Version> createVersion(@PathVariable Long goodId, @RequestParam Double price) {
+    //     Version version = goodService.createVersionForGood(goodId, price);
+    //     return new ResponseEntity<>(version, HttpStatus.CREATED);
+    // }
+
+    // ListResponse 静态类
+    static class ListResponse { 
+        private String msg;
+        private int code;
+        private List<Good> data; 
+
+        public ListResponse(String msg, int code, List<Good> data) {
+            this.msg = msg;
+            this.code = code;
+            this.data = data;
+        }
+
+        public String getMsg() {
+            return msg;
+        }
+
+        public void setMsg(String msg) {
+            this.msg = msg;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public List<Good> getData() {
+            return data;
+        }
+
+        public void setData(List<Good> data) {
+            this.data = data;
+        }
     }
 }
 
