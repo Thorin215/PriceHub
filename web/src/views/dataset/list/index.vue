@@ -1,18 +1,17 @@
 <template>
   <div class="container">
-    <!-- 数据集创建表单 -->
     <el-button type="primary" @click="showProductList">显示商品列表</el-button>
 
     <div v-if="showProducts" class="product-list">
       <h1>商品列表</h1>
       <el-card
         v-for="product in products"
-        :key="product.name"
+        :key="product.id" <!-- 修改为使用 id 作为唯一键 -->
         class="product-card"
       >
-        <h4 class="product-name">{{ product.name }}</h4>
-        <p class="product-price">价格: {{ product.price }} 元</p>
-        <p class="product-stock">库存: {{ product.stock }}</p>
+        <h4 class="product-name">{{ product.name || '无' }}</h4>
+        <p class="product-description">描述: {{ product.description || '无' }}</p> <!-- 添加描述 -->
+        <p class="product-category">类别: {{ product.category || '无' }}</p> <!-- 添加类别 -->
         <div class="product-actions">
           <el-button type="info" icon="el-icon-info" @click="viewDetails(product)">查看详细信息</el-button>
           <el-button type="success" icon="el-icon-shopping-cart" @click="addToCart(product)">加入购物车</el-button>
@@ -25,14 +24,11 @@
         <el-form-item label="商品名称">
           <div>{{ selectedProduct.name || '无' }}</div>
         </el-form-item>
-        <el-form-item label="价格">
-          <div>{{ selectedProduct.price || '无' }} 元</div>
-        </el-form-item>
-        <el-form-item label="库存">
-          <div>{{ selectedProduct.stock || '无' }}</div>
-        </el-form-item>
         <el-form-item label="描述">
           <div>{{ selectedProduct.description || '无' }}</div>
+        </el-form-item>
+        <el-form-item label="类别">
+          <div>{{ selectedProduct.category || '无' }}</div>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -44,28 +40,34 @@
 </template>
 
 <script>
+import { queryAllGoods } from '@/api/good';
+
 export default {
   name: 'ProductsTable',
   data() {
     return {
-      showProducts: false, // 控制商品列表的显示状态
-      products: [
-        { name: 'iPhone 12', price: 6999, stock: 10, description: '苹果手机' },
-        { name: '三星电视', price: 3999, stock: 5, description: '高清电视' },
-        { name: '索尼耳机', price: 999, stock: 20, description: '降噪耳机' }
-      ],
+      showProducts: false,
+      products: [],
       selectedProduct: {
-      name: '',
-      price: 0,
-      stock: 0,
-      description: '',
-    },
+        name: '',
+        description: '',
+        category: '',
+      },
       detailsDialogVisible: false,
     };
   },
   methods: {
     showProductList() {
       this.showProducts = true; // 点击按钮后显示商品列表
+      this.fetchProducts(); // 获取商品数据
+    },
+    async fetchProducts() {
+      try {
+        const response = await queryAllGoods();
+        this.products = response; // 更新产品数据
+      } catch (error) {
+        this.$message.error('获取商品列表失败');
+      }
     },
     viewDetails(product) {
       this.selectedProduct = product;
@@ -80,7 +82,6 @@ export default {
   }
 };
 </script>
-
 <style>
 .container {
   padding: 40px;

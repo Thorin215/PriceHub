@@ -35,7 +35,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { addDatasetVersion } from '@/api/dataset'
+// import { addDatasetVersion } from '@/api/dataset'
 import { uploadFile } from '@/api/file'
 
 export default {
