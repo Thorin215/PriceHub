@@ -1,6 +1,5 @@
 <template> 
   <div class="container">
-    <el-button type="primary" @click="showProductList">显示商品列表</el-button>
 
     <div v-if="showProducts" class="product-list">
       <h1>商品列表</h1>
@@ -39,7 +38,7 @@ export default {
   name: 'ProductsTable',
   data() {
     return {
-      showProducts: false,
+      showProducts: true,
       products: [],
       selectedProduct: {
         name: '',
@@ -50,11 +49,10 @@ export default {
       priceData: [],
     };
   },
+  mounted() {
+    this.fetchProducts(); // 组件加载时获取商品列表
+  },
   methods: {
-    showProductList() {
-      this.showProducts = true;
-      this.fetchProducts();
-    },
     async fetchProducts() {
       try {
         const response = await queryAllGoods();
