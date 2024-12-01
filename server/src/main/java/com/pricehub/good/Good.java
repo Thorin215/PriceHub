@@ -13,6 +13,8 @@ public class Good {
     private String name;
     private String description; // 商品描述
     private String category;    // 商品类别
+    private String platform;   // 商品平台
+    private String image;      // 商品图片
 
     // Getters and Setters
     public Long getId() {
@@ -25,6 +27,22 @@ public class Good {
 
     public String getName() {
         return name;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getPlatform() {
+        return platform;
     }
 
     public void setName(String name) {

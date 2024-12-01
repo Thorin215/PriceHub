@@ -52,6 +52,12 @@ public class GoodController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<Void> updateGoodByName(@RequestParam String name) {
+        goodService.updateGoodByName(name);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     // 创建商品版本
     // @PostMapping("/{goodId}/versions")
     // public ResponseEntity<Version> createVersion(@PathVariable Long goodId, @RequestParam Double price) {

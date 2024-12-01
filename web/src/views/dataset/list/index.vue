@@ -23,7 +23,10 @@
         :key="product.id"
         class="product-card"
       >
+        <!-- 显示商品图片 -->
+        <img :src="product.image" alt="商品图片" class="product-image" />
         <h4 class="product-name">{{ product.name || '无' }}</h4>
+        <el-tag class="product-platform" effect="dark">{{ product.platform }}</el-tag>
         <p class="product-description">描述: {{ product.description || '无' }}</p>
         <p class="product-category">类别: {{ product.category || '无' }}</p>
         <div class="product-actions">
@@ -143,7 +146,7 @@ export default {
 .product-list {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 
 .product-card {
@@ -153,11 +156,25 @@ export default {
   padding: 20px;
   transition: box-shadow 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.product-image {
+  width: 30%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
 }
 
 .product-name {
   font-size: 1.5em;
   color: #333;
+}
+
+.product-platform {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .product-actions {
@@ -171,5 +188,4 @@ export default {
   justify-content: flex-end;
 }
 </style>
-
 

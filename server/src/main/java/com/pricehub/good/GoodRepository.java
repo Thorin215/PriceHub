@@ -2,8 +2,14 @@ package com.pricehub;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface GoodRepository extends JpaRepository<Good, Long> {
-    // 你可以在这里添加自定义查询方法，例如根据名称查找商品
+
+    @Query("SELECT g FROM Good g WHERE g.name = :name AND g.description = :description AND g.platform = :platform")
+    Good findByAllFields(@Param("name") String name, 
+                         @Param("description") String  description, 
+                         @Param("platform") String platform);
 }
