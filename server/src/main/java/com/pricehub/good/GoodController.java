@@ -58,6 +58,16 @@ public class GoodController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 根据名字搜索商品
+    @GetMapping("/search")
+    public ResponseEntity<ListResponse> searchGoodsByName(@RequestParam String name) {
+        
+        List<Good> goods = goodService.searchGoodsByName(name);
+        ListResponse response = new ListResponse("成功", 200, goods);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+        goodService.updateGoodByName(name);
+    }
+
     // 创建商品版本
     // @PostMapping("/{goodId}/versions")
     // public ResponseEntity<Version> createVersion(@PathVariable Long goodId, @RequestParam Double price) {

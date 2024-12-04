@@ -77,7 +77,9 @@ public class GoodService {
             throw new RuntimeException("Failed to fetch and update goods: " + e.getMessage(), e);
         }
     }
-
+    public List<Good> searchGoodsByName(String name) {
+        return goodRepository.findByNameContainingIgnoreCase(name);
+    }
     // 创建商品版本
     public Version createVersionForGood(Long goodId, Double price) {
         return versionService.createVersion(goodId, price);

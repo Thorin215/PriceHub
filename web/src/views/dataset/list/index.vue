@@ -12,28 +12,39 @@
         placeholder="输入子类别"
         class="search-input"
       ></el-input>
+      <el-input
+        v-model="productName"
+        placeholder="输入商品名称"
+        class="search-input"
+      ></el-input>
       <el-button type="primary" @click="filterProducts">搜索</el-button>
     </div>
+
+    <hr class="divider" />
 
     <!-- 商品列表 -->
     <div v-if="showProducts" class="product-list">
       <h1>商品列表</h1>
-      <el-card
-        v-for="product in filteredProducts"
-        :key="product.id"
-        class="product-card"
-      >
-        <!-- 显示商品图片 -->
-        <img :src="product.image" alt="商品图片" class="product-image" />
-        <h4 class="product-name">{{ product.name || '无' }}</h4>
-        <el-tag class="product-platform" effect="dark">{{ product.platform }}</el-tag>
-        <p class="product-description">描述: {{ product.description || '无' }}</p>
-        <p class="product-category">类别: {{ product.category || '无' }}</p>
-        <div class="product-actions">
-          <el-button type="info" icon="el-icon-info" @click="viewDetails(product)">查看详细信息</el-button>
-          <el-button type="success" icon="el-icon-shopping-cart" @click="addToCart(product)">加入购物车</el-button>
-        </div>
-      </el-card>
+      <div class="product-grid">
+        <el-card
+          v-for="product in filteredProducts"
+          :key="product.id"
+          class="product-card"
+        >
+          <div class="product-content">
+            <!-- 图片在文字上 -->
+            <img :src="product.image" alt="商品图片" class="product-image" />
+            <h4 class="product-name">{{ product.name || '无' }}</h4>
+            <el-tag class="product-platform" effect="dark">{{ product.platform }}</el-tag>
+            <p class="product-description">描述: {{ product.description || '无' }}</p>
+            <p class="product-category">类别: {{ product.category || '无' }}</p>
+            <div class="product-actions">
+              <el-button type="info" icon="el-icon-info" @click="viewDetails(product)">查看详细信息</el-button>
+              <el-button type="success" icon="el-icon-shopping-cart" @click="addToCart(product)">加入购物车</el-button>
+            </div>
+          </div>
+        </el-card>
+      </div>
     </div>
 
     <!-- 详细信息对话框 -->
@@ -51,7 +62,7 @@
 
 
 <script>
-import { queryAllGoods } from '@/api/good';
+import { queryAllGoods, queryGoods} from '@/api/good';
 import { queryAllVersions } from '@/api/version';
 
 export default {
@@ -63,6 +74,7 @@ export default {
       filteredProducts: [], // 存放筛选后的商品列表
       parentCategory: '', // 父类别输入框的值
       childCategory: '',  // 子类别输入框的值
+      productName: '',     // 商品名称输入框的值
       selectedProduct: {
         name: '',
         description: '',
@@ -86,17 +98,27 @@ export default {
         this.$message.error('获取商品列表失败');
       }
     },
-    filterProducts() {
-      // 根据父类别和子类别输入框的值筛选商品
-      this.filteredProducts = this.products.filter(product => {
-        const parentMatch = this.parentCategory
-          ? product.parentCategory && product.parentCategory.includes(this.parentCategory)
-          : true;
-        const childMatch = this.childCategory
-          ? product.category && product.category.includes(this.childCategory)
-          : true;
-        return parentMatch && childMatch;
-      });
+    async filterProducts() {
+      if (this.productName === '') {
+        this.filteredProducts = this.products.filter(product => {
+          const parentMatch = this.parentCategory
+            ? product.parentCategory && product.parentCategory.includes(this.parentCategory)
+            : true;
+          const childMatch = this.childCategory
+            ? product.category && product.category.includes(this.childCategory)
+            : true;
+          return parentMatch && childMatch;
+        });
+        this.$message.success('筛选商品列表成功');
+      } else {
+        try {
+          const response = await queryGoods({ name: this.productName }); // 确认 queryGoods 的参数结构是否正确
+          this.filteredProducts = response;
+          this.$message.success('获取商品列表成功');
+        } catch (error) {
+          this.$message.error('获取商品列表失败');
+        }
+      }
     },
     async viewDetails(product) {
       this.selectedProduct = product;
@@ -135,6 +157,7 @@ export default {
 
 .search-box {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -143,25 +166,47 @@ export default {
   width: 200px;
 }
 
-.product-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.divider {
+  margin: 20px 0;
+  border: 0;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+
+.product-list h1 {
+  margin-bottom: 10px;
+  font-size: 1.8em;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .product-card {
-  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  padding: 20px;
   transition: box-shadow 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
+}
+
+.product-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-content {
+  text-align: center;
 }
 
 .product-image {
-  width: 30%;
-  height: auto;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
   border-radius: 4px;
   margin-bottom: 10px;
 }
@@ -169,18 +214,24 @@ export default {
 .product-name {
   font-size: 1.5em;
   color: #333;
+  margin: 10px 0;
 }
 
 .product-platform {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  margin-bottom: 10px;
+}
+
+.product-description,
+.product-category {
+  margin: 5px 0;
+  color: #555;
 }
 
 .product-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-top: 10px;
+  width: 100%;
 }
 
 .dialog-footer {
@@ -188,4 +239,3 @@ export default {
   justify-content: flex-end;
 }
 </style>
-

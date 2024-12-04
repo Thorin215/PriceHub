@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import java.util.List;
 @Repository
 public interface GoodRepository extends JpaRepository<Good, Long> {
 
@@ -12,4 +12,9 @@ public interface GoodRepository extends JpaRepository<Good, Long> {
     Good findByAllFields(@Param("name") String name, 
                          @Param("description") String  description, 
                          @Param("platform") String platform);
+
+//     public interface GoodRepository extends JpaRepository<Good, Long> {
+//     List<Good> findByNameContainingIgnoreCase(String name);
+// }
+    List<Good> findByNameContainingIgnoreCase(String name);
 }

@@ -9,3 +9,14 @@ export function queryAllGoods(){
     method: 'post'
   })
 }
+
+export function queryGoods(params){
+  return request({
+    url: 'http://localhost:8080/api/goods/search',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'get',
+    params
+  })
+}
