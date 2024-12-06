@@ -61,11 +61,11 @@ public class GoodController {
     // 根据名字搜索商品
     @GetMapping("/search")
     public ResponseEntity<ListResponse> searchGoodsByName(@RequestParam String name) {
-        
+        goodService.updateGoodByName(name);
         List<Good> goods = goodService.searchGoodsByName(name);
         ListResponse response = new ListResponse("成功", 200, goods);
         return new ResponseEntity<>(response, HttpStatus.OK);
-        goodService.updateGoodByName(name);
+        
     }
 
     // 创建商品版本

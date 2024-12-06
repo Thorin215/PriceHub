@@ -63,8 +63,9 @@
 
 <script>
 import { queryAllGoods, queryGoods} from '@/api/good';
-import { queryAllVersions } from '@/api/version';
-
+import { queryAllVersions, queryLatestVersion } from '@/api/version';
+import { addToCart } from '@/api/cart';
+import { mapGetters } from 'vuex';
 export default {
   name: 'ProductsTable',
   data() {
@@ -83,6 +84,13 @@ export default {
       detailsDialogVisible: false,
       priceData: [],
     };
+  },
+  computed: {
+    ...mapGetters([
+      'userId',
+      'roles',
+      'userName'
+    ])
   },
   mounted() {
     this.fetchProducts(); // 页面加载时获取商品列表
@@ -137,10 +145,14 @@ export default {
       this.detailsDialogVisible = false;
       this.priceData = []; // 清空数据
     },
-    addToCart(product) {
-      this.$message.success(`${product.name} 已加入购物车！`);
+    async addToCart(product) {
+      // this.$message.success(`${product.id} 已加入购物车！`);
+      const response = await queryLatestVersion(product.id);
+      // this.$message.success(`${response.id} 已加入购物车！`);
+      const res_cart = await addToCart({userId: this.userId, versionId: response.id, goodId: product.id});
+      this.$message.success(res_cart);
     },
-    formatDate(row) {
+    formatDate(row) {s
       const date = new Date(row.createdAt);
       return date.toLocaleString(); // 格式化为本地时间字符串
     }

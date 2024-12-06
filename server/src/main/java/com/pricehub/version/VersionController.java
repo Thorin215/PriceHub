@@ -31,7 +31,16 @@ public class VersionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 其他与版本相关的接口
+    // 根据商品ID获取最新版本号
+    @GetMapping("/latest/{goodId}")
+    public ResponseEntity<Response> getLatestVersion(@PathVariable Long goodId) {
+        Version latestVersion = versionService.getLatestVersionByGoodId(goodId);
+        if (latestVersion == null) {
+            return new ResponseEntity<>(new Response("No versions found", HttpStatus.NOT_FOUND.value(), null), HttpStatus.NOT_FOUND);
+        }
+        Response response = new Response("success", HttpStatus.OK.value(), latestVersion);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     static class Response {
         private String msg;
