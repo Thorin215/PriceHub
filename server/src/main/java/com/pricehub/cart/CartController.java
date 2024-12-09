@@ -37,9 +37,9 @@ public class CartController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ListResponse> getCart(@PathVariable String id) {
-        List<Cart> carts = cartService.getCartByUserId(id);
-        ListResponse response = new ListResponse("success", HttpStatus.OK.value(), carts);
+    public ResponseEntity<ListItemResponse> getCart(@PathVariable String id) {
+        List<CartItem> cartItems = cartService.getCartItemsForUser(id);
+        ListItemResponse response = new ListItemResponse("success", HttpStatus.OK.value(), cartItems);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -162,6 +162,42 @@ public class CartController {
         }
 
         public void setData(List<Cart> data) {
+            this.data = data;
+        }
+    }
+
+    static class ListItemResponse {
+        private String msg;
+        private int code;
+        private List<CartItem> data;
+
+        public ListItemResponse(String msg, int code, List<CartItem> data) {
+            this.msg = msg;
+            this.code = code;
+            this.data = data;
+        }
+
+        public String getMsg() {
+            return msg;
+        }
+
+        public void setMsg(String msg) {
+            this.msg = msg;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public List<CartItem> getData() {
+            return data;
+        }
+
+        public void setData(List<CartItem> data) {
             this.data = data;
         }
     }

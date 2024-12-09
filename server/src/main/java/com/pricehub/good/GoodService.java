@@ -84,4 +84,10 @@ public class GoodService {
     public Version createVersionForGood(Long goodId, Double price) {
         return versionService.createVersion(goodId, price);
     }
+
+    public String searchImageById(Long goodId) {
+        Good good = goodRepository.findById(goodId)
+                .orElseThrow(() -> new RuntimeException("Good not found"));
+        return good.getImage(); // 返回商品的图片路径
+    }
 }

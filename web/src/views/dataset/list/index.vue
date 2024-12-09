@@ -152,7 +152,7 @@ export default {
       const res_cart = await addToCart({userId: this.userId, versionId: response.id, goodId: product.id});
       this.$message.success(res_cart);
     },
-    formatDate(row) {s
+    formatDate(row) {
       const date = new Date(row.createdAt);
       return date.toLocaleString(); // 格式化为本地时间字符串
     }

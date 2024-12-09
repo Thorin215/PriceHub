@@ -25,9 +25,11 @@ com/pricehub/GoodController.class
 com/pricehub/PriceHubApplication.class
 com/pricehub/CartRepository.class
 com/pricehub/UserController.class
+com/pricehub/CartItem.class
 com/pricehub/UserRepository.class
 com/pricehub/Result.class
 com/pricehub/GoodService.class
+com/pricehub/CartController$ListItemResponse.class
 com/pricehub/UserController$LoginRequest.class
 com/pricehub/CartController$ListResponse.class
 com/pricehub/GoodController$ListResponse.class

@@ -8,9 +8,27 @@
       style="width: 100%"
       v-loading="loading"
     >
-      <el-table-column prop="name" label="商品名称" width="200" />
-      <el-table-column prop="goodId" label="商品ID" width="150" />
-      <el-table-column prop="versionId" label="版本ID" width="150" />
+      <!-- 商品图片列 -->
+      <el-table-column label="商品图片" width="150">
+        <template #default="scope">
+          <img :src="scope.row.goodImage" alt="商品图片" style="width: 100px; height: 100px; object-fit: cover;" />
+        </template>
+      </el-table-column>
+
+      <!-- 商品名称列 -->
+      <el-table-column prop="goodName" label="商品名称" width="200" />
+
+     <!-- 商品ID列  -->
+      <!-- <el-table-column prop="goodId" label="商品ID" width="150" /> -->
+
+      <!-- 版本ID列 -->
+      <!-- <el-table-column prop="versionId" label="版本ID" width="150" /> --> 
+
+      <el-table-column prop="price" label="关注时价格" width="150" /> 
+
+      <el-table-column prop="newprice" label="最新价格" width="150" /> 
+
+      <!-- 操作列 -->
       <el-table-column label="操作" width="200">
         <template #default="scope">
           <el-button
@@ -36,6 +54,7 @@
 <script>
 import { getCartItems, removeCartItem, updateCartItem } from "@/api/cart";
 import { mapGetters } from 'vuex';
+
 export default {
   name: "CartPage",
   data() {
@@ -60,7 +79,7 @@ export default {
       this.loading = true;
       try {
         const response = await getCartItems(this.userId);
-        this.cartItems = response;
+        this.cartItems = response.data || response; // 根据API返回的数据格式
       } catch (error) {
         this.$message.error("加载购物车数据失败！");
       } finally {
@@ -71,7 +90,7 @@ export default {
     // 删除购物车商品
     async removeItem(item) {
       try {
-        await removeCartItem(item.id);
+        await removeCartItem(item.goodId, item.versionId);  // 使用 goodId 和 versionId
         this.$message.success("商品删除成功！");
         this.fetchCartItems(); // 重新加载购物车数据
       } catch (error) {
@@ -79,10 +98,11 @@ export default {
       }
     },
 
-    // 更新购物车商品（可扩展逻辑）
+    // 更新购物车商品
     async updateItem(item) {
       try {
-        await updateCartItem(item.id, { versionId: item.versionId + 1 });
+        const newVersionId = item.versionId + 1;  // 假设版本号增加1
+        await updateCartItem(item.goodId, { versionId: newVersionId });
         this.$message.success("商品更新成功！");
         this.fetchCartItems(); // 重新加载购物车数据
       } catch (error) {
@@ -95,7 +115,7 @@ export default {
 
 <style>
 .container {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
@@ -114,5 +134,11 @@ export default {
   color: #999;
   font-size: 1.2rem;
   margin-top: 20px;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;  /* 确保图片缩放时保持比例 */
 }
 </style>

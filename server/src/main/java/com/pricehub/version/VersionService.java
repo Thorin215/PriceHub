@@ -42,4 +42,18 @@ public class VersionService {
                 .max(Comparator.comparing(Version::getCreatedAt)) // 按 createdAt 降序排列
                 .orElse(null); // 如果列表为空，返回 null
     }
+
+    public double getLatestPriceByGoodId(Long goodId) {
+        Version latestVersion = getLatestVersionByGoodId(goodId);
+        if (latestVersion == null) {
+            return 0.0; // 如果没有版本，返回 0
+        }
+        return latestVersion.getPrice(); // 返回最新版本的价格
+    }
+
+    public double searchPriceByVersionId(Long versionId) {
+        Version version = versionRepository.findById(versionId)
+                .orElseThrow(() -> new RuntimeException("Version not found"));
+        return version.getPrice(); // 返回该版本的价格
+    }
 }
