@@ -1,8 +1,9 @@
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/EmailService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/good/GoodRepository.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/good/GoodController.java
-/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartId.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartRepository.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/User.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartItem.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartController.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/UserRepository.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/version/VersionService.java
@@ -16,10 +17,12 @@
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/Item.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/Cart.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/SpiderService.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/VPSpiderService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/SpiderController.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/version/Version.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/UserController.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/category/CategoryController.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/JDSpiderService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/Result.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/version/VersionRepository.java

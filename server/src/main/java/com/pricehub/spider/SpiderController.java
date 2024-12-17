@@ -16,6 +16,11 @@ public class SpiderController {
     @Autowired
     private SpiderService spiderService;
 
+    @Autowired
+    private JDSpiderService jdSpiderService;
+
+    @Autowired
+    private VPSpiderService vpSpiderService;
     /**
      * 获取爬虫数据
      * 
@@ -33,6 +38,36 @@ public class SpiderController {
             List<Item> spiderResult = spiderService.getItems(query);
             return Result.success(spiderResult, spiderResult.size());
         } catch (IOException | InterruptedException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch data", e);
+        }
+    }
+
+    @GetMapping("/api/jd")
+    public Result getJDData(@RequestParam String query) {
+        System.out.println("query: " + query);
+        if (query == null || query.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Query parameter cannot be empty");
+        }
+
+        try {
+            List<Item> jdSpiderResult = jdSpiderService.getItems(query);
+            return Result.success(jdSpiderResult, jdSpiderResult.size());
+        } catch (IOException | InterruptedException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch data", e);
+        }
+    }
+
+    @GetMapping("/api/vp")
+    public Result getVPData(@RequestParam String query) {
+        System.out.println("query: " + query);
+        if (query == null || query.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Query parameter cannot be empty");
+        }
+
+        try {
+            List<Item> vpSpiderResult = vpSpiderService.getItems(query);
+            return Result.success(vpSpiderResult, vpSpiderResult.size());
+        } catch (InterruptedException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch data", e);
         }
     }

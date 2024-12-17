@@ -57,7 +57,7 @@ export const constantRoutes = [
         name: 'Update',
         component: () => import('@/views/update/all/index'),
         meta: {
-          title: '更新数据集',
+          title: '我的收藏',
           icon: 'pen'
         }
       }
@@ -72,7 +72,7 @@ export const constantRoutes = [
         name: 'Record',
         component: () => import('@/views/record/all/index'),
         meta: {
-          title: '我的记录',
+          title: '账户修改',
           icon: 'new3'
         }
       }]

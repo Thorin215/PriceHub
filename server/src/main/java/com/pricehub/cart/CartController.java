@@ -62,6 +62,25 @@ public class CartController {
         cartService.clearCart(userId);
         return ResponseEntity.ok("购物车已清空");
     }
+
+    /**
+     * 检查购物车中商品是否有更新版本且价格更低
+     * @param userId 用户ID
+     * @return 返回商品名称列表，如果有更新版本且价格更低
+     */
+    @GetMapping("/change")
+    public ResponseEntity<?> checkForUpdatedVersionAndLowerPrice(@RequestParam String userId) {
+        List<String> updatedGoods = cartService.checkForUpdatedVersionAndLowerPrice(userId);
+        
+        if (updatedGoods.isEmpty()) {
+            Response response = new Response("success", HttpStatus.OK.value(), "没有找到价格更低的更新版本商品");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            Response response = new Response("success", HttpStatus.OK.value(), updatedGoods);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+    }
+
     
     static class CartRequest {
         private String userId;

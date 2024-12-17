@@ -49,19 +49,17 @@
 
     <!-- 详细信息对话框 -->
     <el-dialog title="商品价格变化" :visible.sync="detailsDialogVisible" width="60%" @close="closeDetailsDialog">
-      <el-table :data="priceData" style="width: 100%">
-        <el-table-column prop="createdAt" label="时间" :formatter="formatDate" class-name="blue-text" />
-        <el-table-column prop="price" label="价格" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDetailsDialog">返回</el-button>
-      </span>
-    </el-dialog>
+  <div id="price-chart" style="width: 100%; height: 400px;"></div>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="closeDetailsDialog">返回</el-button>
+  </span>
+</el-dialog>
   </div>
 </template>
 
 
 <script>
+import * as echarts from 'echarts';
 import { queryAllGoods, queryGoods} from '@/api/good';
 import { queryAllVersions, queryLatestVersion } from '@/api/version';
 import { addToCart } from '@/api/cart';
@@ -83,6 +81,7 @@ export default {
       },
       detailsDialogVisible: false,
       priceData: [],
+      chartInstance: null, // 保存 ECharts 实例
     };
   },
   computed: {
@@ -132,18 +131,68 @@ export default {
       this.selectedProduct = product;
       await this.fetchVersions(product.id);
       this.detailsDialogVisible = true;
+      this.$nextTick(() => {
+        this.initChart();
+      });
     },
     async fetchVersions(goodId) {
       try {
         const response = await queryAllVersions(goodId);
-        this.priceData = response; // 假设返回的价格数据包含时间戳和价格
+        this.priceData = response.map(item => ({
+          time: item.createdAt,
+          price: item.price,
+        })); // 格式化为时间和价格
       } catch (error) {
         this.$message.error('获取版本数据失败');
       }
     },
+    initChart() {
+      if (!this.chartInstance) {
+        this.chartInstance = echarts.init(document.getElementById('price-chart'));
+      }
+
+      const times = this.priceData.map(item => new Date(item.time).toLocaleDateString());
+      const prices = this.priceData.map(item => item.price);
+
+      const option = {
+        title: {
+          text: '商品价格变化趋势',
+          left: 'center',
+        },
+        tooltip: {
+          trigger: 'axis',
+        },
+        xAxis: {
+          type: 'category',
+          data: times,
+          boundaryGap: false,
+          axisLabel: {
+            rotate: 45,
+          },
+        },
+        yAxis: {
+          type: 'value',
+          name: '价格 (元)',
+        },
+        series: [
+          {
+            data: prices,
+            type: 'line',
+            smooth: true,
+            areaStyle: {},
+          },
+        ],
+      };
+
+      this.chartInstance.setOption(option);
+    },
     closeDetailsDialog() {
       this.detailsDialogVisible = false;
-      this.priceData = []; // 清空数据
+      this.priceData = [];
+      if (this.chartInstance) {
+        this.chartInstance.dispose();
+        this.chartInstance = null;
+      }
     },
     async addToCart(product) {
       // this.$message.success(`${product.id} 已加入购物车！`);

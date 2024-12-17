@@ -2,6 +2,7 @@ com/pricehub/Version.class
 com/pricehub/CategoryService.class
 com/pricehub/CartController$CartRequest.class
 com/pricehub/CartController$Response.class
+com/pricehub/JDSpiderService.class
 com/pricehub/UserController$Response.class
 com/pricehub/Item.class
 com/pricehub/UserController$QueryRequest.class
@@ -15,6 +16,7 @@ com/pricehub/VersionController$ListResponse.class
 com/pricehub/UserController$ListResponse.class
 com/pricehub/SpiderController.class
 com/pricehub/Cart.class
+com/pricehub/VPSpiderService.class
 com/pricehub/VersionController$Response.class
 com/pricehub/Good.class
 com/pricehub/VersionService.class
@@ -22,8 +24,10 @@ com/pricehub/VersionRepository.class
 com/pricehub/Category.class
 com/pricehub/CategoryController.class
 com/pricehub/GoodController.class
+com/pricehub/UserService.class
 com/pricehub/PriceHubApplication.class
 com/pricehub/CartRepository.class
+com/pricehub/EmailService.class
 com/pricehub/UserController.class
 com/pricehub/CartItem.class
 com/pricehub/UserRepository.class

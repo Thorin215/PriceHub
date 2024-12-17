@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2 class="title">我的购物车</h2>
+    <h2 class="title">我的收藏</h2>
 
     <el-table
       :data="cartItems"
