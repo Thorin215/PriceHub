@@ -40,9 +40,9 @@ public class UserService {
                 .orElse(null); // 如果找不到该邮箱的用户，返回null
     }
 
-    public void saveVerificationCode(String userId, String code) {
+    public void saveVerificationCode(String email, String code) {
         // 尝试查找该用户的验证码记录
-        CodeRecord existingCodeRecord = codeRecordRepository.findByUserId(userId);
+        CodeRecord existingCodeRecord = codeRecordRepository.findByEmail(email);
 
         if (existingCodeRecord != null) {
             // 如果存在，更新验证码和创建时间
@@ -52,27 +52,31 @@ public class UserService {
         } else {
             // 如果不存在，创建新的验证码记录
             CodeRecord newCodeRecord = new CodeRecord();
-            newCodeRecord.setUserId(userId);
+            newCodeRecord.setEmail(email); // 设置 email
             newCodeRecord.setCode(code);
             newCodeRecord.setCreatedAt(new Date());
             codeRecordRepository.save(newCodeRecord); // 保存新记录
         }
     }
 
-    public boolean verifyVerificationCode(String userId, String userInputCode) {
-        CodeRecord codeRecord = codeRecordRepository.findByUserId(userId);
+    public boolean verifyVerificationCode(String email, String userInputCode) {
+        // 根据 email 查找验证码记录
+        CodeRecord codeRecord = codeRecordRepository.findByEmail(email);
 
+        // 验证码不存在
         if (codeRecord == null) {
             System.out.println("验证码不存在");
             return false;
         }
 
+        // 验证码已过期
         if (codeRecord.isExpired()) {
             System.out.println("验证码已过期");
-            codeRecordRepository.delete(codeRecord);
+            codeRecordRepository.delete(codeRecord); // 删除过期的验证码
             return false;
         }
 
+        // 验证码不匹配
         if (!codeRecord.getCode().equals(userInputCode)) {
             System.out.println("验证码不匹配");
             return false;

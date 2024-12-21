@@ -38,9 +38,9 @@ public class SpiderController {
         }
 
         try {
-            List<Item> spiderResult = spiderService.getItems(query);
+            List<Item> spiderResult = spiderService.getItemsSN(query);
             return Result.success(spiderResult, spiderResult.size());
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch data", e);
         }
     }

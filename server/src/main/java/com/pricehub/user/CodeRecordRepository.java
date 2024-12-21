@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CodeRecordRepository extends JpaRepository<CodeRecord, Long> {
-    CodeRecord findByUserId(String userId); // 根据用户ID查找验证码记录
+    CodeRecord findByEmail(String email); // 根据 email 查找验证码记录
 }

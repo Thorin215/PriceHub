@@ -7,6 +7,10 @@
         placeholder="输入商品名称"
         class="search-input"
       ></el-input>
+      <el-select v-model="selectedPlatform" placeholder="选择平台" @change="filterProducts">
+        <el-option label="阿里巴巴" value="阿里巴巴"></el-option>
+        <el-option label="苏宁" value="苏宁"></el-option>
+      </el-select>
       <el-button type="primary" @click="filterProducts">搜索</el-button>
       <el-button type="success" @click="updateGood">更新</el-button>
     </div>
@@ -26,7 +30,7 @@
             <!-- 图片在文字上 -->
             <img :src="product.image" alt="商品图片" class="product-image" />
             <h4 class="product-name">{{ product.name || '无' }}</h4>
-            <el-tag class="product-platform" effect="dark">{{ product.platform }}</el-tag>
+            <el-tag :class="productPlatformClass(product.platform)" effect="dark">{{ product.platform }}</el-tag>
             <p class="product-description">描述: {{ product.description || '无' }}</p>
             <div class="product-actions">
               <el-button type="info" icon="el-icon-info" @click="viewDetails(product)">查看价格变化</el-button>
@@ -70,6 +74,7 @@ export default {
       detailsDialogVisible: false,
       priceData: [],
       chartInstance: null, // 保存 ECharts 实例
+      selectedPlatform: '', // 选择的平台
     };
   },
   computed: {
@@ -94,13 +99,18 @@ export default {
       }
     },
     async filterProducts() {
-      if (this.productName === '') {
+      if (this.productName === '' && this.selectedPlatform === '') {
         this.filteredProducts = this.products;
         this.$message.success('筛选商品列表成功');
       } else {
         try {
-          const response = await queryGoods({ name: this.productName }); // 确认 queryGoods 的参数结构是否正确
-          this.filteredProducts = response;
+          const response = await queryGoods({ name: this.productName, platform: this.selectedPlatform }); // 确认 queryGoods 的参数结构是否正确
+          if (this.selectedPlatform === '') {
+            this.filteredProducts = response;
+          } else {
+            this.filteredProducts = response.filter(product => product.platform === this.selectedPlatform);
+          }
+          // this.filteredProducts = response;
           this.$message.success('获取商品列表成功');
         } catch (error) {
           this.$message.error('获取商品列表失败');
@@ -114,8 +124,6 @@ export default {
       } else {
         try {
           const response = await updateGoods({ name: this.productName });
-          // const message = response.headers["message"]; // 获取自定义消息头
-          // this.$message.success(message); // 显示后端返回的消息
           this.$message.success('更新商品列表成功');
           this.fetchProducts();
         } catch (error) {
@@ -123,17 +131,6 @@ export default {
         }
       }
     },
-    // async updateGoods() {
-//     try {
-//         await updateGoodByName(this.productName);
-//         
-//         
-//         this.fetchProducts(); // 重新获取商品列表
-//     } catch (error) {
-//         const message = error.response.headers["x-message"]; // 获取自定义消息头
-//         this.$message.error(message || "更新失败，请稍后重试");
-//     }
-// },
     async viewDetails(product) {
       this.selectedProduct = product;
       await this.fetchVersions(product.id);
@@ -209,6 +206,9 @@ export default {
     formatDate(row) {
       const date = new Date(row.createdAt);
       return date.toLocaleString(); // 格式化为本地时间字符串
+    },
+    productPlatformClass(platform) {
+      return platform === '阿里巴巴' ? 'alibaba-tag' : 'suning-tag';
     }
   }
 };
@@ -302,5 +302,15 @@ export default {
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
+}
+
+.alibaba-tag {
+  background-color: orange;
+  color: white;
+}
+
+.suning-tag {
+  background-color: yellow;
+  color: black;
 }
 </style>

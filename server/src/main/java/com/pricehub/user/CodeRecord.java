@@ -10,7 +10,7 @@ public class CodeRecord {
     private Long id; // 主键
 
     @Column(nullable = false)
-    private String userId; // 用户ID
+    private String email; // 替换 userId 为 email
 
     @Column(nullable = false)
     private String code; // 验证码
@@ -28,12 +28,12 @@ public class CodeRecord {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCode() {

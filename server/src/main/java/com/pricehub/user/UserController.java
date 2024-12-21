@@ -25,6 +25,13 @@ public class UserController {
 
     @PostMapping("/create")
     public ResponseEntity<Response> addUser(@RequestBody User user) {
+        if (userRepository.findById(user.getId()).isPresent()) {
+            Response response = new Response("user already exists", HttpStatus.BAD_REQUEST.value(), "用户已存在");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } else if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            Response response = new Response("email already exists", HttpStatus.BAD_REQUEST.value(), "邮箱已存在");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
         userRepository.save(user);
         Response response = new Response("success", HttpStatus.OK.value(), user);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -88,13 +95,13 @@ public class UserController {
 
     @PostMapping("/sendver")
     public ResponseEntity<Response> sendVerificationCode(@RequestParam String email) {
-        // 验证邮箱是否存在 
-        User user = userService.getUserByEmail(email);
+        // // 验证邮箱是否存在 
+        // User user = userService.getUserByEmail(email);
 
-        if (user == null) {
-            Response response = new Response("email not found", HttpStatus.NOT_FOUND.value(), "邮箱不存在");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
+        // if (user == null) {
+        //     Response response = new Response("email not found", HttpStatus.NOT_FOUND.value(), "邮箱不存在");
+        //     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        // }
 
         // 生成验证码
         String verificationCode = generateVerificationCode();
@@ -105,7 +112,7 @@ public class UserController {
         emailService.sendPriceDropEmail(email, subject, content);
 
         // 保存验证码到数据库
-        userService.saveVerificationCode(user.getId(), verificationCode);
+        userService.saveVerificationCode(email, verificationCode);
 
         Response response = new Response("verification code sent", HttpStatus.OK.value(), "验证码已发送");
         return new ResponseEntity<>(response, HttpStatus.OK);

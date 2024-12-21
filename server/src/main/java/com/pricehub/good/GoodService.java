@@ -30,13 +30,16 @@ public class GoodService {
     private JDSpiderService jdSpiderService; // 注入 JDSpiderService
 
     @Autowired
+    private SNSpiderService snSpiderService; // 注入 SNSpiderService
+
+    @Autowired
     private SearchRecordRepository searchRecordRepository;
 
     private ExecutorService mainExecutorService;
     // 创建商品
     @PostConstruct
     public void init() {
-        mainExecutorService = Executors.newFixedThreadPool(10); // 初始化固定大小的线程池
+        mainExecutorService = Executors.newFixedThreadPool(30); // 初始化固定大小的线程池
     }
 
     @PreDestroy
@@ -94,8 +97,8 @@ public class GoodService {
 
         try {
             // 使用线程池提交任务
-            // mainExecutorService.submit(() -> fetchAndUpdateGoodsFromPlatform(jdSpiderService, name));
-            mainExecutorService.submit(() -> fetchAndUpdateGoodsFromPlatform(spiderService, name));
+            fetchAndUpdateGoodsFromPlatform(snSpiderService, name);
+            fetchAndUpdateGoodsFromPlatform(spiderService, name);
         } catch (Exception e) {
             System.err.println("Thread interrupted: " + e.getMessage());
             throw new RuntimeException("Failed to fetch and update goods due to thread interruption.", e);
@@ -108,8 +111,8 @@ public class GoodService {
             List<Item> items;
             if (spiderService instanceof SpiderService) {
                 items = ((SpiderService) spiderService).getItems(name);
-            } else if (spiderService instanceof JDSpiderService) {
-                items = ((JDSpiderService) spiderService).getItems(name);
+            } else if (spiderService instanceof SNSpiderService) {
+                items = ((SNSpiderService) spiderService).getItems(name);
             } else {
                 throw new IllegalArgumentException("Unsupported spider service");
             }

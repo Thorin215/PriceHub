@@ -1,6 +1,7 @@
 com/pricehub/Version.class
 com/pricehub/CategoryService.class
 com/pricehub/JDSpiderService.class
+com/pricehub/SNSpiderService.class
 com/pricehub/UserController$Response.class
 com/pricehub/SearchRecord.class
 com/pricehub/CartController.class

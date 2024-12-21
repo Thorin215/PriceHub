@@ -102,6 +102,11 @@
               </el-select>
             </div>
           </el-form-item>
+          <!-- 验证码输入框 -->
+          <el-form-item label="验证码">
+            <el-input v-model="registerForm.verificationCode" placeholder="请输入验证码"></el-input>
+            <el-button type="primary" @click="sendVerificationCodeForRegister">发送验证码</el-button>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="registerDialogVisible = false">取消</el-button>
@@ -138,8 +143,8 @@ export default {
         id: '',
         password: '',
         emailPrefix: '', // 邮箱前缀
-        emailSuffix: '' // 邮箱后缀
-        // verificationCode: ''
+        emailSuffix: '', // 邮箱后缀
+        verificationCode: '' // 验证码
       },
       emailList: ['@gmail.com', '@yahoo.com', '@outlook.com', '@qq.com', '@163.com'],  // 常见邮箱后缀
       userIdError: false,
@@ -215,7 +220,8 @@ export default {
       })
     },
     sendVerificationCodeForRegister() {
-      sendCode(this.registerForm.emailPrefix + this.registerForm.emailSuffix).then(response => {
+      const email = this.registerForm.emailPrefix + this.registerForm.emailSuffix;
+      sendCode(email).then(response => {
         if (response === '验证码已发送') {          
           this.$message.success('验证码发送成功')
         } else {
@@ -305,5 +311,3 @@ export default {
 
 }
 </style>
-
-

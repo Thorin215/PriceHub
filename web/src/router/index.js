@@ -46,21 +46,22 @@ export const constantRoutes = [
         }
       }
       ]
-    },
-    {
-      path: '/',
-      component: Layout,
-      redirect: '/record',
-      children: [{
-        path: 'record',
-        name: 'Record',
-        component: () => import('@/views/record/all/index'),
-        meta: {
-          title: '个性化记录',
-          icon: 'new3'
-        }
-      }]
     }
+    // ,
+    // {
+    //   path: '/',
+    //   component: Layout,
+    //   redirect: '/record',
+    //   children: [{
+    //     path: 'record',
+    //     name: 'Record',
+    //     component: () => import('@/views/record/all/index'),
+    //     meta: {
+    //       title: '个性化记录',
+    //       icon: 'new3'
+    //     }
+    //   }]
+    // }
 ]
 
 export const asyncRoutes = [

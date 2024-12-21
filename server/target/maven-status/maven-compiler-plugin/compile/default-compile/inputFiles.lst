@@ -3,6 +3,7 @@
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/UserService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/good/GoodController.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartRepository.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/SNSpiderService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/User.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartItem.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartController.java

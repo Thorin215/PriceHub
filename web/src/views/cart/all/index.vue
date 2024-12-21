@@ -4,7 +4,7 @@
 
     <!-- 按钮组 -->
     <div class="button-group">
-      <el-button type="danger" @click="clearCart">清空购物车</el-button>
+      <el-button type="danger" @click="clearCart">清空收藏夹</el-button>
       <el-button type="primary" @click="sendReminder">一键发送提示</el-button>
     </div>
 
@@ -52,7 +52,7 @@
     </el-table>
 
     <div v-if="cartItems.length === 0" class="no-data">
-      <p>购物车为空。</p>
+      <p>收藏夹为空</p>
     </div>
   </div>
 </template>
