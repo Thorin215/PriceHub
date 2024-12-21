@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # 将构建的 JAR 文件复制到容器中的工作目录
-COPY --FROM server target/pricehub-backend-1.0-SNAPSHOT.jar pricehub.jar
+COPY --from=server /target/pricehub-backend-1.0-SNAPSHOT.jar pricehub.jar
 
 # 将 src 目录的内容复制到容器中的 /app/src 目录
 COPY src /app/src
