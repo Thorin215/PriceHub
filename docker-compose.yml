@@ -2,11 +2,11 @@ version: '2.1'
 
 services:
   pricehub.server:
-    # image: pricehub.server:latest
-    # container_name: pricehub.server
-    build:
-      context: server
-      dockerfile: Dockerfile
+    image: pricehub.server:latest
+    container_name: pricehub.server
+    # build:
+    #   context: server
+    #   dockerfile: Dockerfile
     ports:
       - "8080:8080"
     volumes:
@@ -25,11 +25,11 @@ services:
       - pricehub-network
 
   pricehub.web:
-    # image: pricehub.web:latest
-    # container_name: pricehub.web
-    build:
-      context: web
-      dockerfile: Dockerfile
+    image: pricehub.web:latest
+    container_name: pricehub.web
+    # build:
+    #   context: web
+    #   dockerfile: Dockerfile
     ports:
       - "8000:80"
     depends_on:

@@ -29,6 +29,14 @@ jobs:
       #     ls -l
         # ls -l ./server
 
+      # 4. 构建并推送 application.web 镜像
+      - name: Build and push pricehub.web
+        uses: docker/build-push-action@v2
+        with:
+          context: web # 构建上下文为 web 目录
+          push: true # 推送镜像到 Docker Hub
+          tags: thorin215/pricehub.web:latest # 镜像标签
+
       # 3. 构建并推送 pri.server 镜像
       - name: Build and push pricehub.server
         uses: docker/build-push-action@v2
@@ -37,10 +45,4 @@ jobs:
           push: true # 推送镜像到 Docker Hub
           tags: thorin215/pricehub.server:latest # 镜像标签
 
-      # 4. 构建并推送 application.web 镜像
-      - name: Build and push pricehub.web
-        uses: docker/build-push-action@v2
-        with:
-          context: web # 构建上下文为 web 目录
-          push: true # 推送镜像到 Docker Hub
-          tags: thorin215/pricehub.web:latest # 镜像标签
+
