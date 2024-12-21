@@ -20,3 +20,14 @@ export function queryGoods(params){
     params
   })
 }
+
+export function updateGoods(params){
+  return request({
+    url: 'http://localhost:8080/api/goods/update',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    params
+  })
+}

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CartService {
@@ -50,20 +51,38 @@ public class CartService {
     public List<Cart> getCartByUserId(String userId) {
         return cartRepository.findByUserId(userId);
     }
-
+    @Transactional
     public void updateCart(String userId, Long goodId, Long versionId) {
-        Cart cart = new Cart();
-        cart.setUserId(userId);
-        cart.setGoodId(goodId);
-        cart.setVersionId(versionId);
-        cartRepository.save(cart);
-    }
+        Version newVersion = versionService.getLatestVersionByGoodId(goodId);
+        Long newVersionId = newVersion.getId();
+        Optional<Cart> cartItemOptional = cartRepository.findByUserIdAndGoodIdAndVersionId(userId, goodId, versionId);
 
+        // 如果商品存在，更新版本
+        if (cartItemOptional.isPresent()) {
+            Cart cartItem = cartItemOptional.get();
+            cartItem.setVersionId(newVersionId); // 更新版本
+            cartRepository.save(cartItem); // 保存更新
+        } else {
+            throw new RuntimeException("商品不存在于购物车中");
+        }
+    }
+    
+
+    @Transactional // 确保数据库操作是事务性的
     public void removeCart(String userId, Long goodId, Long versionId) {
-        cartRepository.deleteByUserId(userId); // 删除指定用户的所有购物车项，或可以根据需求调整
-    }
+        // 查找购物车中是否存在该商品
+        Optional<Cart> cartItemOptional = cartRepository.findByUserIdAndGoodIdAndVersionId(userId, goodId, versionId);
 
+        // 如果存在，则删除
+        if (cartItemOptional.isPresent()) {
+            cartRepository.delete(cartItemOptional.get());
+        } else {
+            throw new RuntimeException("商品不存在于购物车中");
+        }
+    }
+    @Transactional
     public void clearCart(String userId) {
+        System.out.println("clear:" +  userId);
         cartRepository.deleteByUserId(userId);
     }
 
@@ -84,8 +103,8 @@ public class CartService {
             item.setGoodId(good.getId());
             item.setGoodName(good.getName());
             item.setGoodImage(good.getImage()); // 假设 Good 类有 image 字段
-            item.setPrice(version != null ? version.getPrice().doubleValue() : 0.0); // 获取版本的价格
-            item.setVersionId(version != null ? version.getId() : null); // 获取版本 ID
+            item.setPrice(versionService.searchPriceByVersionId(cart.getVersionId())); // 获取版本的价格
+            item.setVersionId(cart != null ? cart.getVersionId() : null); // 获取版本 ID
             item.setNewprice(versionService.getLatestPriceByGoodId(good.getId())); // 获取最新价格
 
             // 将 CartItem 添加到列表

@@ -21,6 +21,9 @@ public class SpiderController {
 
     @Autowired
     private VPSpiderService vpSpiderService;
+
+    @Autowired
+    private AMZSpiderService amzSpiderService;
     /**
      * 获取爬虫数据
      * 
@@ -68,6 +71,21 @@ public class SpiderController {
             List<Item> vpSpiderResult = vpSpiderService.getItems(query);
             return Result.success(vpSpiderResult, vpSpiderResult.size());
         } catch (InterruptedException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch data", e);
+        }
+    }
+
+    @GetMapping("/api/amz")
+    public Result getAMZData(@RequestParam String query) {
+        System.out.println("query: " + query);
+        if (query == null || query.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Query parameter cannot be empty");
+        }
+
+        try {
+            List<Item> amzSpiderResult = amzSpiderService.getItems(query);
+            return Result.success(amzSpiderResult, amzSpiderResult.size());
+        } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch data", e);
         }
     }

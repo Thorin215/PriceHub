@@ -20,12 +20,12 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dataset',
+    redirect: '/good',
     children: [
       {
-        path: 'dataset',
-        name: 'Dataset',
-        component: () => import('@/views/dataset/list/index'),
+        path: 'good',
+        name: 'Good',
+        component: () => import('@/views/good/list/index'),
         meta: {
           title: '商品信息',
           icon: 'xj'
@@ -35,27 +35,11 @@ export const constantRoutes = [
     {
       path: '/',
       component: Layout,
-      redirect: '/upload',
-      children: [
-        {
-        path: 'upload',
-        name: 'Upload',
-        component: () => import('@/views/upload/all/index'),
-        meta: {
-          title: '新建数据集',
-          icon: 'new2'
-        }
-      }
-      ]
-    },
-    {
-      path: '/',
-      component: Layout,
-      redirect: '/update',
+      redirect: '/cart',
       children: [{
-        path: 'update',
-        name: 'Update',
-        component: () => import('@/views/update/all/index'),
+        path: 'cart',
+        name: 'Cart',
+        component: () => import('@/views/cart/all/index'),
         meta: {
           title: '我的收藏',
           icon: 'pen'
@@ -72,7 +56,7 @@ export const constantRoutes = [
         name: 'Record',
         component: () => import('@/views/record/all/index'),
         meta: {
-          title: '账户修改',
+          title: '个性化记录',
           icon: 'new3'
         }
       }]

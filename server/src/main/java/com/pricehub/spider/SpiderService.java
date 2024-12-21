@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.TimeoutException;
-
+import org.openqa.selenium.remote.RemoteWebDriver;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -25,7 +25,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
 import java.util.concurrent.TimeUnit;
-
+import java.net.URL;
+import org.openqa.selenium.WebDriverException;
 @Service
 public class SpiderService {
 
@@ -36,38 +37,67 @@ public class SpiderService {
         List<Item> items = new ArrayList<>();
         String fullUrl = URL + query;
         System.out.println("Full URL: " + fullUrl);
-        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
-        // 使用 WebDriverManager 自动管理 Chrome WebDriver
-        // WebDriverManager.chromedriver().setup();
-        // WebDriverManager.chromedriver().setup();
-        // 获取并打印 chromedriver 路径
-        String chromedriverPath = System.getProperty("webdriver.chrome.driver");
-        System.out.println("ChromeDriver Path: " + chromedriverPath);
+        // System.setProperty("webdriver.chrome.driver", "/app/src/main/resources/chromedriver");
+
+        // String chromedriverPath = System.getProperty("webdriver.chrome.driver");
+        // System.out.println("ChromeDriver Path: " + chromedriverPath);
 
         // 配置 Chrome 浏览器选项
         ChromeOptions options = new ChromeOptions();
+        // options.setBinary("/app/src/main/resources/chromium-browser");
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--headless");
         options.addArguments("--disable-gpu");
         options.addArguments("--no-sandbox");
 
+        System.out.println("Options created");
         // 创建 ChromeDriver 服务并指定端口
-        ChromeDriverService service = new ChromeDriverService.Builder()
-            .usingPort(9515)  // 指定端口
-            .build();
+        // ChromeDriverService service = new ChromeDriverService.Builder()
+        //     .usingPort(9515)  // 指定端口
+        //     .build();
 
-        System.out.println("Service created");
+        // System.out.println("Service created");
+        // WebDriver driver = null;
+        
+        String seleniumHubUrl = "http://selenium-chrome:4444"; // Docker Desktop 可以用 host.docker.internal
+
+        // 如果你知道你的容器的 IP 地址，也可以使用 IP
+        // String seleniumHubUrl = "http://<container-ip>:4444/wd/hub";
+
+        System.out.println("Connecting to Selenium Hub: " + seleniumHubUrl);
+        // System.out.println("URL created");
+
         WebDriver driver = null;
+        // WebDriver driver = new RemoteWebDriver(url, options);
+        // System.out.println("Driver created");
 
         try {
-            // 创建 WebDriver 实例，传入已配置的服务和选项
-            System.out.println("Creating driver");
-            driver = new ChromeDriver(service, options);
-            System.out.println("Driver created");
+            /*Docker Version*/
 
-            // 打开目标 URL
+            URL url = new URL(seleniumHubUrl); // 连接到 Selenium Grid
+            System.out.println("URL created");
+            try{
+                driver = new RemoteWebDriver(url, options);
+                System.out.println("Driver created");
+            }catch(WebDriverException e){
+                System.out.println("Error: " + e.getMessage());
+            }
+            // driver = new RemoteWebDriver(url, options);
+            // System.out.println("Driver created");
+            
             driver.get(fullUrl);
             System.out.println("URL opened");
+            // 创建 WebDriver 实例，传入已配置的服务和选项
+            // System.out.println("Creating driver");
+            // // driver = new ChromeDriver(service, options);
+
+
+
+            // System.out.println("Driver created");
+
+            // // 打开目标 URL
+            // driver.get(fullUrl);
+            // System.out.println("URL opened");
 
             // 等待页面加载完成
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));

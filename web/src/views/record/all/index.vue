@@ -1,33 +1,11 @@
 <template>
   <div>
-    <el-table :data="downloadRecords" style="width: 100%">
-      <el-table-column prop="dataset_owner" label="Dataset Owner" width="180">
+    <el-table :data="searchRecords" style="width: 100%">
+      <el-table-column prop="userId" label="User ID" width="180">
       </el-table-column>
-      <el-table-column prop="dataset_name" label="Dataset Name" width="180">
+      <el-table-column prop="productName" label="Product Name" width="180">
       </el-table-column>
-      <el-table-column prop="user" label="User" width="180">
-      </el-table-column>
-      <el-table-column
-          prop="time"
-          label="Download Time"
-          width="180"
-        >
-          <template slot-scope="scope">
-            {{ new Date(scope.row.time).toISOString() }} <!-- 输出 ISO 8601 格式 -->
-          </template>
-        </el-table-column>
-      <el-table-column label="Files">
-        <template slot-scope="scope">
-          <el-tag
-            v-for="(file, index) in scope.row.files"
-            :key="index"
-            type="primary"
-            style="margin-right: 5px"
-          >
-            <!-- 将file.filename与后端返回的字段一致 -->
-            {{ file.filename }}
-          </el-tag>
-        </template>
+      <el-table-column prop="searchCount" label="Search Count" width="180">
       </el-table-column>
     </el-table>
   </div>
@@ -35,27 +13,27 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { queryRecordsByUser } from '@/api/record';
+import { querySearchRecordsByUser } from '@/api/record';
 
 export default {
   data() {
     return {
-      downloadRecords: [] // Store fetched download records
+      searchRecords: [] // 存储搜索记录
     };
   },
   computed: {
     ...mapGetters(['userId', 'userName', 'roles']),
   },
   mounted() {
-    this.fetchDownloadRecords(); // Fetch download records when component mounts
+    this.fetchSearchRecords(); // 组件挂载时获取搜索记录
   },
   methods: {
-    async fetchDownloadRecords() {
+    async fetchSearchRecords() {
       try {
-        const response = await queryRecordsByUser({ user: this.userId }); // Adjust API endpoint as needed
-        this.downloadRecords = response; // Assuming the data is in the 'data' field of the response
+        const response = await querySearchRecordsByUser({ userId: this.userId }); // 调用 API 获取搜索记录
+        this.searchRecords = response.data; // 假设返回的数据在 data 字段中
       } catch (error) {
-        this.$message.error("Failed to fetch download records");
+        this.$message.error("Failed to fetch search records");
       }
     }
   }

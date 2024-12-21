@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api/user")
@@ -15,6 +16,12 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/create")
     public ResponseEntity<Response> addUser(@RequestBody User user) {
@@ -52,6 +59,62 @@ public class UserController {
             Response response = new Response("user not found", HttpStatus.NOT_FOUND.value(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<Response> resetPassword(@RequestBody SetPasswordRequest request) {
+        // 验证邮箱是否存在
+        User user = userService.getUserByEmail(request.getEmail());
+
+        if (user == null) {
+            Response response = new Response("email not found", HttpStatus.NOT_FOUND.value(), "邮箱不存在");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        // 验证验证码
+        boolean isVerified = userService.verifyVerificationCode(user.getId(), request.getVerificationCode());
+        if (!isVerified) {
+            Response response = new Response("invalid verification code", HttpStatus.BAD_REQUEST.value(), "验证码无效");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        // 更新密码
+        user.setPassword(request.getNewPassword());
+        userRepository.save(user);
+
+        Response response = new Response("password reset successful", HttpStatus.OK.value(), "密码重置成功");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/sendver")
+    public ResponseEntity<Response> sendVerificationCode(@RequestParam String email) {
+        // 验证邮箱是否存在 
+        User user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            Response response = new Response("email not found", HttpStatus.NOT_FOUND.value(), "邮箱不存在");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        // 生成验证码
+        String verificationCode = generateVerificationCode();
+
+        // 发送验证码邮件
+        String subject = "PriceHub 验证码";
+        String content = "您的验证码是：" + verificationCode + "，请在5分钟内使用。";
+        emailService.sendPriceDropEmail(email, subject, content);
+
+        // 保存验证码到数据库
+        userService.saveVerificationCode(user.getId(), verificationCode);
+
+        Response response = new Response("verification code sent", HttpStatus.OK.value(), "验证码已发送");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    private String generateVerificationCode() {
+        Random random = new Random();
+        int code = 100000 + random.nextInt(900000); // 生成100000到999999之间的随机数
+        return String.valueOf(code);
     }
 
     static class QueryRequest {
@@ -157,6 +220,37 @@ public class UserController {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+    }
+
+    static class SetPasswordRequest {
+        private String email; // 用户邮箱
+        private String verificationCode; // 验证码
+        private String newPassword; // 新密码
+
+        // Getters and Setters
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getVerificationCode() {
+            return verificationCode;
+        }
+
+        public void setVerificationCode(String verificationCode) {
+            this.verificationCode = verificationCode;
+        }
+
+        public String getNewPassword() {
+            return newPassword;
+        }
+
+        public void setNewPassword(String newPassword) {
+            this.newPassword = newPassword;
         }
     }
 }

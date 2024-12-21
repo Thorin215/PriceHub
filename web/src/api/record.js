@@ -1,13 +1,12 @@
 import request from '@/utils/request'
 
-export function queryRecordsByUser(data) {
+export function querySearchRecordsByUser(data) {
   return request({
-    url: 'http://localhost:8888/api/v1/record/by/user',
+    url: 'http://localhost:8080/api/record/user',
     headers: {
       'Content-Type': 'application/json'
     },
     method: 'post',
     data
   })
-  
 }

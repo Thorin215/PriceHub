@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/goods")
@@ -52,20 +54,43 @@ public class GoodController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // @PostMapping("/update")
+    // public ResponseEntity<ListResponse> updateGoodByName(@RequestParam String name) {
+    //     List<Good> goods = null;
+    //     try {
+    //         goodService.updateGoodByName(name);
+    //         // 返回成功状态和消息
+    //         ListResponse response = new ListResponse("成功", 200, goods);
+    //         return new ResponseEntity<>(response, HttpStatus.OK);
+    //     } catch (Exception e) {
+    //         // 返回错误状态和消息
+    //         ListResponse response = new ListResponse("失败", 500, goods);
+    //         return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+    //     }
+    // }
+    
     @PostMapping("/update")
-    public ResponseEntity<Void> updateGoodByName(@RequestParam String name) {
-        goodService.updateGoodByName(name);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<ListResponse> updateGoodByName(@RequestParam String name) {
+        try {
+            // 调用服务层方法
+            goodService.updateGoodByNameAsync(name);
+
+            // 构建成功响应
+            ListResponse response = new ListResponse("成功", 200, Collections.emptyList());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            // 构建错误响应
+            ListResponse response = new ListResponse("失败: " + e.getMessage(), 500, Collections.emptyList());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // 根据名字搜索商品
     @GetMapping("/search")
     public ResponseEntity<ListResponse> searchGoodsByName(@RequestParam String name) {
-        goodService.updateGoodByName(name);
         List<Good> goods = goodService.searchGoodsByName(name);
         ListResponse response = new ListResponse("成功", 200, goods);
         return new ResponseEntity<>(response, HttpStatus.OK);
-        
     }
 
     // 创建商品版本

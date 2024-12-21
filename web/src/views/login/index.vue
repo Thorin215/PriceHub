@@ -33,7 +33,28 @@
       <div class="button-container">
         <el-button :loading="loading" type="primary" class="action-button" @click.native.prevent="handleLogin">登录</el-button>
         <el-button type="success" class="action-button" @click.native.prevent="showRegisterDialog">注册</el-button>
+        <el-button type="warning" class="action-button" @click.native.prevent="showResetPasswordDialog">忘记密码</el-button>
       </div>
+
+      <!-- 重置密码弹窗 -->
+      <el-dialog title="重置密码" :visible.sync="resetPasswordDialogVisible" width="50%" center>
+        <el-form ref="resetPasswordForm" :model="resetPasswordForm">
+          <el-form-item label="邮箱">
+            <el-input v-model="resetPasswordForm.email" placeholder="请输入注册时使用的邮箱"></el-input>
+          </el-form-item>
+          <el-form-item label="验证码">
+            <el-input v-model="resetPasswordForm.verificationCode" placeholder="请输入收到的验证码"></el-input>
+            <el-button type="primary" @click="sendVerificationCode">发送验证码</el-button>
+          </el-form-item>
+          <el-form-item label="新密码">
+            <el-input type="password" v-model="resetPasswordForm.newPassword" placeholder="请输入新密码"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="resetPasswordDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="handleResetPassword">确认重置</el-button>
+        </div>
+      </el-dialog>
 
       <!-- 注册弹窗 -->
       <el-dialog title="用户注册" :visible.sync="registerDialogVisible" width="50%" center>
@@ -92,7 +113,7 @@
 </template>
 
 <script>
-import { queryAllUsers, createUser, checkLogin } from '@/api/user'
+import { queryAllUsers, createUser, checkLogin, resetPassword, sendCode } from '@/api/user'
 
 export default {
   name: 'Login',
@@ -105,15 +126,24 @@ export default {
         id: '',
         password: ''
       },
+      resetPasswordDialogVisible: false, // 控制重置密码弹窗显示
+      resetPasswordForm: {
+        email: '',
+        verificationCode: '',
+        newPassword: ''
+      },
       registerDialogVisible: false, // 控制注册弹窗显示
       registerForm: {
         name: '',
         id: '',
         password: '',
         emailPrefix: '', // 邮箱前缀
-        emailSuffix: ''  // 邮箱后缀
+        emailSuffix: '' // 邮箱后缀
+        // verificationCode: ''
       },
-      emailList: ['@gmail.com', '@yahoo.com', '@outlook.com', '@qq.com', '@163.com']  // 常见邮箱后缀
+      emailList: ['@gmail.com', '@yahoo.com', '@outlook.com', '@qq.com', '@163.com'],  // 常见邮箱后缀
+      userIdError: false,
+      passwordError: false
     }
   },
   watch: {
@@ -137,8 +167,8 @@ export default {
     handleLogin() {
       if (this.loginForm.id && this.loginForm.password) {
         this.loading = true
-        checkLogin(this.loginForm).then(reponse => {
-          if(reponse === '登录成功'){          
+        checkLogin(this.loginForm).then(response => {
+          if (response === '登录成功') {          
             this.$store.dispatch('user/login', this.loginForm.id).then(path => {
               this.$router.push({ path: path })
             })
@@ -166,6 +196,46 @@ export default {
       // 使用正则表达式验证邮箱前缀
       const regex = /^[a-zA-Z0-9][a-zA-Z0-9._]*[a-zA-Z0-9]$/;
       return regex.test(prefix);
+    },
+    checkUserIdLength() {
+      this.userIdError = this.registerForm.id.length < 6;
+    },
+    checkPasswordLength() {
+      this.passwordError = this.registerForm.password.length < 6;
+    },
+    sendVerificationCode() {
+      sendCode(this.resetPasswordForm.email).then(response => {
+        if (response === '验证码已发送') {          
+          this.$message.success('验证码发送成功')
+        } else {
+          this.$message.error('验证码发送失败')
+        }
+      }).catch(() => {
+        this.$message.error('验证码发送失败')
+      })
+    },
+    sendVerificationCodeForRegister() {
+      sendCode(this.registerForm.emailPrefix + this.registerForm.emailSuffix).then(response => {
+        if (response === '验证码已发送') {          
+          this.$message.success('验证码发送成功')
+        } else {
+          this.$message.error('验证码发送失败')
+        }
+      }).catch(() => {
+        this.$message.error('验证码发送失败')
+      })
+    },
+    handleResetPassword() {
+      resetPassword(this.resetPasswordForm).then(response => {
+        if (response === '密码重置成功') {
+          this.$message.success('密码重置成功')
+          this.resetPasswordDialogVisible = false
+        } else {
+          this.$message.error('密码重置失败')
+        }
+      }).catch(() => {
+        this.$message.error('密码重置失败')
+      })
     },
     handleRegister() {
       if (this.registerForm.name && this.registerForm.id && this.registerForm.password) {
@@ -195,6 +265,9 @@ export default {
       } else {
         this.$message.error('请填写所有字段');
       }
+    },
+    showResetPasswordDialog() {
+      this.resetPasswordDialogVisible = true;
     }
   }
 }

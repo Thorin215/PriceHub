@@ -3,21 +3,12 @@
     <!-- 搜索框 -->
     <div class="search-box">
       <el-input
-        v-model="parentCategory"
-        placeholder="输入父类别"
-        class="search-input"
-      ></el-input>
-      <el-input
-        v-model="childCategory"
-        placeholder="输入子类别"
-        class="search-input"
-      ></el-input>
-      <el-input
         v-model="productName"
         placeholder="输入商品名称"
         class="search-input"
       ></el-input>
       <el-button type="primary" @click="filterProducts">搜索</el-button>
+      <el-button type="success" @click="updateGood">更新</el-button>
     </div>
 
     <hr class="divider" />
@@ -37,10 +28,9 @@
             <h4 class="product-name">{{ product.name || '无' }}</h4>
             <el-tag class="product-platform" effect="dark">{{ product.platform }}</el-tag>
             <p class="product-description">描述: {{ product.description || '无' }}</p>
-            <p class="product-category">类别: {{ product.category || '无' }}</p>
             <div class="product-actions">
-              <el-button type="info" icon="el-icon-info" @click="viewDetails(product)">查看详细信息</el-button>
-              <el-button type="success" icon="el-icon-shopping-cart" @click="addToCart(product)">加入购物车</el-button>
+              <el-button type="info" icon="el-icon-info" @click="viewDetails(product)">查看价格变化</el-button>
+              <el-button type="success" icon="el-icon-shopping-cart" @click="addToCart(product)">加入收藏夹</el-button>
             </div>
           </div>
         </el-card>
@@ -49,21 +39,21 @@
 
     <!-- 详细信息对话框 -->
     <el-dialog title="商品价格变化" :visible.sync="detailsDialogVisible" width="60%" @close="closeDetailsDialog">
-  <div id="price-chart" style="width: 100%; height: 400px;"></div>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="closeDetailsDialog">返回</el-button>
-  </span>
-</el-dialog>
+      <div id="price-chart" style="width: 100%; height: 400px;"></div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeDetailsDialog">返回</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
-
 <script>
 import * as echarts from 'echarts';
-import { queryAllGoods, queryGoods} from '@/api/good';
+import { queryAllGoods, queryGoods, updateGoods } from '@/api/good';
 import { queryAllVersions, queryLatestVersion } from '@/api/version';
 import { addToCart } from '@/api/cart';
 import { mapGetters } from 'vuex';
+
 export default {
   name: 'ProductsTable',
   data() {
@@ -71,8 +61,6 @@ export default {
       showProducts: true,
       products: [],
       filteredProducts: [], // 存放筛选后的商品列表
-      parentCategory: '', // 父类别输入框的值
-      childCategory: '',  // 子类别输入框的值
       productName: '',     // 商品名称输入框的值
       selectedProduct: {
         name: '',
@@ -107,15 +95,7 @@ export default {
     },
     async filterProducts() {
       if (this.productName === '') {
-        this.filteredProducts = this.products.filter(product => {
-          const parentMatch = this.parentCategory
-            ? product.parentCategory && product.parentCategory.includes(this.parentCategory)
-            : true;
-          const childMatch = this.childCategory
-            ? product.category && product.category.includes(this.childCategory)
-            : true;
-          return parentMatch && childMatch;
-        });
+        this.filteredProducts = this.products;
         this.$message.success('筛选商品列表成功');
       } else {
         try {
@@ -127,6 +107,33 @@ export default {
         }
       }
     },
+    async updateGood() {
+      if (this.productName === '') {
+        this.$message.info('请输入商品名称');
+        return;
+      } else {
+        try {
+          const response = await updateGoods({ name: this.productName });
+          // const message = response.headers["message"]; // 获取自定义消息头
+          // this.$message.success(message); // 显示后端返回的消息
+          this.$message.success('更新商品列表成功');
+          this.fetchProducts();
+        } catch (error) {
+          this.$message.error('更新商品列表失败');
+        }
+      }
+    },
+    // async updateGoods() {
+//     try {
+//         await updateGoodByName(this.productName);
+//         
+//         
+//         this.fetchProducts(); // 重新获取商品列表
+//     } catch (error) {
+//         const message = error.response.headers["x-message"]; // 获取自定义消息头
+//         this.$message.error(message || "更新失败，请稍后重试");
+//     }
+// },
     async viewDetails(product) {
       this.selectedProduct = product;
       await this.fetchVersions(product.id);
@@ -195,9 +202,7 @@ export default {
       }
     },
     async addToCart(product) {
-      // this.$message.success(`${product.id} 已加入购物车！`);
       const response = await queryLatestVersion(product.id);
-      // this.$message.success(`${response.id} 已加入购物车！`);
       const res_cart = await addToCart({userId: this.userId, versionId: response.id, goodId: product.id});
       this.$message.success(res_cart);
     },
@@ -208,7 +213,6 @@ export default {
   }
 };
 </script>
-
 
 <style>
 .container {

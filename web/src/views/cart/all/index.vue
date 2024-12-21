@@ -2,6 +2,12 @@
   <div class="container">
     <h2 class="title">我的收藏</h2>
 
+    <!-- 按钮组 -->
+    <div class="button-group">
+      <el-button type="danger" @click="clearCart">清空购物车</el-button>
+      <el-button type="primary" @click="sendReminder">一键发送提示</el-button>
+    </div>
+
     <el-table
       :data="cartItems"
       border
@@ -18,15 +24,15 @@
       <!-- 商品名称列 -->
       <el-table-column prop="goodName" label="商品名称" width="200" />
 
-     <!-- 商品ID列  -->
+      <!-- 商品ID列 -->
       <!-- <el-table-column prop="goodId" label="商品ID" width="150" /> -->
 
       <!-- 版本ID列 -->
-      <!-- <el-table-column prop="versionId" label="版本ID" width="150" /> --> 
+      <!-- <el-table-column prop="versionId" label="版本ID" width="150" /> -->
 
-      <el-table-column prop="price" label="关注时价格" width="150" /> 
+      <el-table-column prop="price" label="关注时价格" width="150" />
 
-      <el-table-column prop="newprice" label="最新价格" width="150" /> 
+      <el-table-column prop="newprice" label="最新价格" width="150" />
 
       <!-- 操作列 -->
       <el-table-column label="操作" width="200">
@@ -52,7 +58,8 @@
 </template>
 
 <script>
-import { getCartItems, removeCartItem, updateCartItem } from "@/api/cart";
+import { getCartItems, removeCartItem, updateCartItem, clearCart } from "@/api/cart";
+import { checkCart } from "@/api/cart"; // 引入 checkCart API
 import { mapGetters } from 'vuex';
 
 export default {
@@ -90,7 +97,11 @@ export default {
     // 删除购物车商品
     async removeItem(item) {
       try {
-        await removeCartItem(item.goodId, item.versionId);  // 使用 goodId 和 versionId
+        await removeCartItem({
+          userId: this.userId,
+          goodId: item.goodId, // 从当前行数据中获取 goodId
+          versionId: item.versionId // 从当前行数据中获取 versionId
+        });
         this.$message.success("商品删除成功！");
         this.fetchCartItems(); // 重新加载购物车数据
       } catch (error) {
@@ -101,14 +112,38 @@ export default {
     // 更新购物车商品
     async updateItem(item) {
       try {
-        const newVersionId = item.versionId + 1;  // 假设版本号增加1
-        await updateCartItem(item.goodId, { versionId: newVersionId });
+        await updateCartItem({
+          userId: this.userId,
+          goodId: item.goodId, // 从当前行数据中获取 goodId
+          versionId: item.versionId // 从当前行数据中获取 versionId
+        });
         this.$message.success("商品更新成功！");
         this.fetchCartItems(); // 重新加载购物车数据
       } catch (error) {
         this.$message.error("商品更新失败！");
       }
     },
+
+    // 清空购物车
+    async clearCart() {
+      try {
+        const response = await clearCart(this.userId);
+        this.$message.success("购物车已清空！");
+        this.fetchCartItems(); // 重新加载购物车数据
+      } catch (error) {
+        this.$message.error("清空购物车失败！");
+      }
+    },
+
+    // 一键发送提示
+    async sendReminder() {
+      try {
+        const response = await checkCart(this.userId); // 调用 checkCart API
+        this.$message.success("提示发送成功！");
+      } catch (error) {
+        this.$message.error("提示发送失败！");
+      }
+    }
   },
 };
 </script>
@@ -140,5 +175,11 @@ img {
   width: 100px;
   height: 100px;
   object-fit: cover;  /* 确保图片缩放时保持比例 */
+}
+
+.button-group {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

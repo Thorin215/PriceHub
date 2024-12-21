@@ -1,5 +1,6 @@
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/EmailService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/good/GoodRepository.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/UserService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/good/GoodController.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartRepository.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/User.java
@@ -10,8 +11,11 @@
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/category/Category.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/category/CategoryRepository.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/version/VersionController.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/good/SearchRecordRepository.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/CodeRecord.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/PriceHubApplication.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/category/CategoryService.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/CodeRecordRepository.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/good/Good.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/good/GoodService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/Item.java
@@ -21,7 +25,9 @@
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/SpiderController.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/version/Version.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/cart/CartService.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/good/SearchRecord.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/user/UserController.java
+/mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/AMZSpiderService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/category/CategoryController.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/JDSpiderService.java
 /mnt/d/86134/Desktop/PriceHub/server/src/main/java/com/pricehub/spider/Result.java

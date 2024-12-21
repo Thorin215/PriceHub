@@ -42,3 +42,24 @@ export function checkLogin(data) {
     data
   })
 }
+
+export function resetPassword(data) {
+  return request({
+    url: 'http://localhost:8080/api/user/reset',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    data
+  })
+}
+
+export function sendCode(email) {
+  return request({
+    url: `http://localhost:8080/api/user/sendver?email=${email}`,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post'
+  })
+}

@@ -43,24 +43,38 @@ public class CartController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateCart(@RequestParam String userId, @RequestParam Long goodId,
-                                         @RequestParam Long versionId) {
-        cartService.updateCart(userId, goodId, versionId);
-        return ResponseEntity.ok("购物车商品更新成功");
+    @PostMapping("/update")
+    public ResponseEntity<?> updateCart(@RequestBody CartRequest request) {
+        try{
+            cartService.updateCart(request.getUserId(), request.getGoodId(), request.getVersionId());
+            Response response = new Response("success", HttpStatus.OK.value(), "商品更新成功");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            Response response = new Response("error", HttpStatus.BAD_REQUEST.value(), "商品更新失败");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<?> removeCart(@RequestParam String userId, @RequestParam Long goodId,
-                                         @RequestParam Long versionId) {
-        cartService.removeCart(userId, goodId, versionId);
-        return ResponseEntity.ok("商品删除成功");
+    public ResponseEntity<?> removeCart(@RequestBody CartRequest request) {
+        try {
+            // 调用服务层方法删除商品
+            cartService.removeCart(request.getUserId(), request.getGoodId(), request.getVersionId());
+            Response response = new Response("success", HttpStatus.OK.value(), "商品删除成功");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            // 捕获异常并返回错误信息
+            Response response = new Response("error", HttpStatus.BAD_REQUEST.value(), "商品删除失败");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/clear")
     public ResponseEntity<?> clearCart(@RequestParam String userId) {
+         System.out.println("clear:" +  userId);
         cartService.clearCart(userId);
-        return ResponseEntity.ok("购物车已清空");
+        Response response = new Response("success", HttpStatus.OK.value(), "商品清空成功");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -68,7 +82,7 @@ public class CartController {
      * @param userId 用户ID
      * @return 返回商品名称列表，如果有更新版本且价格更低
      */
-    @GetMapping("/change")
+    @PostMapping("/check")
     public ResponseEntity<?> checkForUpdatedVersionAndLowerPrice(@RequestParam String userId) {
         List<String> updatedGoods = cartService.checkForUpdatedVersionAndLowerPrice(userId);
         
