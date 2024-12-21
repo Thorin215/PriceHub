@@ -5,7 +5,7 @@ services:
     # image: pricehub.server:latest
     # container_name: pricehub.server
     build:
-      context: ./server
+      context: server
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -17,6 +17,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - TZ=Asia/Shanghai
     depends_on:
       - mysql
       - selenium-chrome
@@ -27,7 +28,7 @@ services:
     # image: pricehub.web:latest
     # container_name: pricehub.web
     build:
-      context: ./web
+      context: web
       dockerfile: Dockerfile
     ports:
       - "8000:80"
