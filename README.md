@@ -22,9 +22,11 @@ npm run build:prod
 docker build -t pricehub.web:latest .
 ```
 
-![6ca95f370894cc759504da7e223def3](./README.assets/6ca95f370894cc759504da7e223def3.png)
-
 ```bash
 docker run -d -p 8000:80 --name pricehub.web pricehub.web:latest
 ```
 
+```
+docker pull thorin215/pricehub.web:latest
+docker pull thorin215/pricehub.server:latest
+```
