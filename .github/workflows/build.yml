@@ -29,16 +29,6 @@ jobs:
           ls -l
         # ls -l ./server
 
-      - name: Check if JAR file exists
-        run: |
-          ls -l ./target/pricehub-backend-1.0-SNAPSHOT.jar
-          if [ ! -f ./target/pricehub-backend-1.0-SNAPSHOT.jar ]; then
-            echo "JAR file not found!"
-            exit 1
-          fi
-
-
-
       # 3. 构建并推送 pri.server 镜像
       - name: Build and push pricehub.server
         uses: docker/build-push-action@v2
