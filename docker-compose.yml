@@ -5,8 +5,8 @@ services:
     # image: pricehub.server:latest
     # container_name: pricehub.server
     build:
-      context: server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: server/Dockerfile
     ports:
       - "8080:8080"
     volumes:
