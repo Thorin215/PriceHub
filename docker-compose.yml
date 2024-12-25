@@ -3,6 +3,7 @@ version: '2.1'
 services:
   pricehub.server:
     image: pricehub.server:latest
+    # image: thorin215/pricehub.server:latest
     container_name: pricehub.server
     # build:
     #   context: server
@@ -26,6 +27,7 @@ services:
 
   pricehub.web:
     image: pricehub.web:latest
+    # image: thorin215/pricehub.web:latest
     container_name: pricehub.web
     # build:
     #   context: web

@@ -1,10 +1,9 @@
 ## Environment
 
-- 开发环境：Ubuntu22.04 (wsl)
-- 开发框架：Vue + Java
-
-- 前端启动：`npm run dev`
-- 后端启动：`mvn spring-boot:run`
+- **Development Environment**: Ubuntu 22.04 (WSL)
+- **Development Framework**: Vue + Java
+- **Frontend Startup**: `npm run dev`
+- **Backend Startup**: `mvn spring-boot:run`
 
 ## Docker
 
@@ -26,7 +25,32 @@ docker build -t pricehub.web:latest .
 docker run -d -p 8000:80 --name pricehub.web pricehub.web:latest
 ```
 
-```
+### Access
+
+- Can be accessed on the DockerHub
+
+- [Web Docker](https://hub.docker.com/r/thorin215/pricehub.web)
+
+- [Server Docker](https://hub.docker.com/r/thorin215/pricehub.server)
+
+```bash
 docker pull thorin215/pricehub.web:latest
 docker pull thorin215/pricehub.server:latest
 ```
+
+## Docker-Compose
+
+```bash
+./start.sh
+./stop.sh
+```
+
+```
+docker-compose up -d
+```
+
+
+
+## Docs
+
+- All the **Documents** are inthe `./docs`，In the design report, I have incorporated the user manual, test report, development reflections, and summary。
