@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
+import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -36,10 +36,14 @@ public class GoodService {
     private SearchRecordRepository searchRecordRepository;
 
     private ExecutorService mainExecutorService;
+
+    private ScheduledExecutorService scheduler;
+
     // 创建商品
     @PostConstruct
     public void init() {
         mainExecutorService = Executors.newFixedThreadPool(30); // 初始化固定大小的线程池
+        // scheduler = Executors.newScheduledThreadPool(1); // 初始化定时任务线程池
     }
 
     @PreDestroy
@@ -230,4 +234,57 @@ public class GoodService {
     public List<SearchRecord> getSearchRecordsByUserId(String userId) {
         return searchRecordRepository.findByUserId(userId);
     }
+
+    // public void startSixHourTask(Runnable task) {
+    //     // 每隔6小时执行一次任务
+    //     long initialDelay = 0; // 首次延迟时间（立即执行）
+    //     long period = 6; // 间隔时间
+    //     TimeUnit unit = TimeUnit.HOURS; 
+
+    //     scheduler.scheduleAtFixedRate(task, initialDelay, period, unit);
+    // }
+
+    // public void shutdown() {
+    //     // 关闭调度器
+    //     if (scheduler != null) {
+    //         scheduler.shutdown();
+    //         try {
+    //             // 等待任务完成
+    //             if (!scheduler.awaitTermination(10, TimeUnit.SECONDS)) {
+    //                 scheduler.shutdownNow(); // 强制关闭
+    //             }
+    //         } catch (InterruptedException e) {
+    //             scheduler.shutdownNow();
+    //         }
+    //     }
+    // }
+
+    // public static void main(String[] args) {
+    //     SixHourTaskScheduler scheduler = new SixHourTaskScheduler();
+
+    //     // 定义任务
+    //     Runnable task = () -> {
+    //         System.out.println("Task executed at: " + System.currentTimeMillis());
+    //         /*持续功能 爬取 / 提醒 */
+
+
+
+
+
+    //     };
+
+    //     // 启动任务
+    //     scheduler.startSixHourTask(task);
+
+    //     // 模拟程序运行
+    //     try {
+    //         // 主线程睡眠24小时，观察任务执行
+    //         Thread.sleep(24 * 60 * 60 * 1000);
+    //     } catch (InterruptedException e) {
+    //         System.err.println("Main thread interrupted: " + e.getMessage());
+    //     } finally {
+    //         // 关闭调度器
+    //         scheduler.shutdown();
+    //     }
+    // }
 }

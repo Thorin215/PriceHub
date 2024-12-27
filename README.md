@@ -45,11 +45,9 @@ docker pull thorin215/pricehub.server:latest
 ./stop.sh
 ```
 
-```
+```bash
 docker-compose up -d
 ```
-
-
 
 ## Docs
 

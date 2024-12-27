@@ -79,7 +79,7 @@ public class UserController {
         }
 
         // 验证验证码
-        boolean isVerified = userService.verifyVerificationCode(user.getId(), request.getVerificationCode());
+        boolean isVerified = userService.verifyVerificationCode(user.getEmail(), request.getVerificationCode());
         if (!isVerified) {
             Response response = new Response("invalid verification code", HttpStatus.BAD_REQUEST.value(), "验证码无效");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
