@@ -7,7 +7,13 @@
 
 ## Docker
 
+```bash
+docker load < my_image_export.tar
+```
+
 ### Server
+
+- dockerfile is in `./server`
 
 ```bash
 mvn clean package
@@ -15,6 +21,8 @@ docker build -t pricehub.server:latest .
 ```
 
 ### Web
+
+- dockerfile is in `./web`
 
 ```bash
 npm run build:prod
